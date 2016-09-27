@@ -1,0 +1,62 @@
+#menu-navbar li:hover{
+    background:#eee;
+}
+    #menu-navbar>ul>li>a:hover{
+        color:black;
+    }
+
+
+/**
+ *  Sets the site logo in the vertical center of the navbar
+**/
+.navbar-brand {
+  padding: 0px;
+}
+    .navbar-brand>img {
+      height: auto;
+      padding: 5px;
+      width: 50px;
+    }
+
+
+.hide-md-screen{
+    display:none;
+}
+.hide-sm-screen{
+    display:inline;
+}
+
+#content-wrapper{
+    padding-left:5%;
+    padding-right:5%;
+}
+
+
+#site-logo{
+    width:250px;
+    height:auto;
+}
+
+
+@media(max-width:768px){
+    #content-wrapper{
+        padding-left:1%;
+        padding-right:1%;
+    }
+
+    .hide-md-screen{
+        display:inline;
+    }
+
+    .hide-sm-screen{
+        display:none;
+    }
+
+    #site-logo{
+        max-width:50%;
+    }
+
+    .navbar-text{
+        padding-left:10px;
+    }
+}

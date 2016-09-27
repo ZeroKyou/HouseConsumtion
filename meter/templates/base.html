@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="mobile-web-app-capable" content="yes">
+        <title>Household Consumption Monitor</title>
+
+        <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" />
+        <link rel="icon" href="{% static 'images/hc_mobile_icon.png' %}" />
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/Style.css' %}" />
+        <script src="{% static 'js/jquery-3.1.1.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <!-- Link to homepage -->
+                    <a class="navbar-brand" href="{% url 'index' %}">
+                        <img src="{% static 'images/hc_nav.png' %}" alt="Household Consumption">
+                    </a>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-navbar">
+                        <span class="glyphicon glyphicon-menu-hamburger"></span>
+                    </button>
+                </div>
+
+                <div class="collapse navbar-collapse" id="menu-navbar">
+                    <!-- NAV LINKS -->
+                    <ul class="nav navbar-nav">
+                        <li><a href="#">Energy Meter</a></li>
+                        <li><a href="#">Water Meter</a></li>
+                        <li><a href="#">Total Consumption</a></li>
+                        <li><a href="#">Alerts</a></li>
+                    </ul>
+
+                    <!-- LOGIN -->
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if user.is_authenticated %}
+                            <p class="navbar-text"><span class="hide-sm-screen">Bemvindo {{ user.username }} </span>
+                                <small>
+                                    <a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                                </small>
+                            </p>
+                        {% else %}
+                        <li>
+                        <a href="{% url 'login' %}" title="Login"><span class="glyphicon glyphicon-lock"><span class="hide-md-screen">Login</span></span></a>
+                        </li>
+                        {% endif %}
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <div class="row" id="content-wrapper">
+                    {% block content %}
+                    {% endblock %}
+            </div>
+        </div>
+    </body>
+</html>

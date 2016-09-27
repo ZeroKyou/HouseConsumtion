@@ -1,4 +1,5 @@
 *.pyc
+*.sqlite3
 manage.py
 .idea/
 
