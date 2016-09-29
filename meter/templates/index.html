@@ -1,8 +1,24 @@
 {% extends "./base.html" %}
+
 {% load staticfiles %}
 {% block content %}
     <div class="col-md-12">
         <div class="text-center">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if user.is_authenticated %}
+                        <div class="alert alert-success fade in">
+                            {{ message }}
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info fade in">
+                            {{ message }}
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
             <img id="site-logo" src="{% static 'images/hc_logo.png' %}">
             <br/>
             <h2>Pode usar este site para visualizar os gastos energéticos e de água da sua casa!</h2>

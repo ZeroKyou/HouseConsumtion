@@ -29,29 +29,31 @@
                 </div>
 
                 <div class="collapse navbar-collapse" id="menu-navbar">
-                    <!-- NAV LINKS -->
-                    <ul class="nav navbar-nav">
-                        <li><a href="#">Energy Meter</a></li>
-                        <li><a href="#">Water Meter</a></li>
-                        <li><a href="#">Total Consumption</a></li>
-                        <li><a href="#">Alerts</a></li>
-                    </ul>
-
                     <!-- LOGIN -->
-                    <ul class="nav navbar-nav navbar-right">
+                    <ul class="nav navbar-nav navbar-right" id="login-info">
                         {% if user.is_authenticated %}
-                            <p class="navbar-text"><span class="hide-sm-screen">Bemvindo {{ user.username }} </span>
+                            <p class="navbar-text">Olá {{ user.username }}!
                                 <small>
                                     <a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
                                 </small>
                             </p>
                         {% else %}
-                        <li>
-                        <a href="{% url 'login' %}" title="Login"><span class="glyphicon glyphicon-lock"><span class="hide-md-screen">Login</span></span></a>
-                        </li>
+                            <li>
+                            <a href="{% url 'login' %}" title="Login"><span class="glyphicon glyphicon-lock"><span class="hide-md-screen">Login</span></span></a>
+                            </li>
                         {% endif %}
+                        <hr>
                     </ul>
 
+                    <!-- NAV LINKS -->
+                    <ul class="nav navbar-nav" id="menu-items">
+                        <li><a href="#">Contador de Energia</a></li>
+                        <li><a href="#">Contador de Água</a></li>
+                        <li><a href="#">Consumo Total</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a href="#">Configuração</a></li>
+                        {% endif %}
+                    </ul>
                 </div>
             </div>
         </nav>
