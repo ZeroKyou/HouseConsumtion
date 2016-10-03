@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
 from meter.forms import SignupForm
+from meter.db_to_charts_classes import ElectricityGraphData
 
 
 # Create your views here.
@@ -39,9 +41,51 @@ def signup(request):
     return render(request, 'registration/signup.html', {'form': form})
 
 
-def electricity_meter(request):
+# !!!!!!!!!!!!!!!!!!!!! IMPORTANT !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# INSTEAD OF CREATING 4 VIEWS FOR EACH GRAHP, CREATE ONE VIEW
+# THAT RECEIVES THE AN ARGUMENT WITH THE GRAPH WE WANT TO DRAW
+# !!!!!!!!!!!!!!!!!!!!! IMPORTANT !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# def electricity_meter(request, time_length):
+#     ...(database query)...
+#     return render(request, 'energy_meter/energy_meter.html', {[database_data], graph_to_draw})
+def electricity_meter(request, time_period):
+    data = ElectricityGraphData.get_data(time_period)
+
+    if data is None:
+        data = []
+
+    chart = {"renderTo": "graph-container", "type": "line", "height": "500px"}
+    title = {"text": 'Energia Consumida'}
+    x_axis = {"title": {"text": ''}, "categories": data['date']}
+    y_axis = {"title": {"text": 'Data'}}
+    series = [
+        {"name": 'Current (A)', "data": data['current']},
+        {"name": 'Voltage (V)', "data": data['voltage']},
+        {"name": 'Power (W)', "data": data['power']}
+    ]
+
+    return render(request, 'energy_meter/energy_meter.html', {'chart': chart,
+                                                              'title': title,
+                                                              'xAxis': x_axis,
+                                                              'yAxis': y_axis,
+                                                              'series': series})
+
+
+@csrf_exempt
+def add_electricity_reading(request):
     pass
 
 
-def water_meter(request):
+def water_meter(request, time_period):
+    data = []
+    return render(request, 'water_meter/water_meter.html', {'data': data, 'time_period': time_period})
+
+
+@csrf_exempt
+def add_water_reading(request):
     pass
+
+
+def total_consumption(request, time_period):
+    data = []
+    return render(request, 'total_consumption/total_consumption.html', {'data': data, 'time_period': time_period})

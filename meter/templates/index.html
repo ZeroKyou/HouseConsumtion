@@ -23,6 +23,14 @@
             <br/>
             <h2>Pode usar este site para visualizar os gastos energéticos e de água da sua casa!</h2>
             <h2>Clique num item do menu acima para começar.</h2>
+            {% if user.is_authenticated != True %}
+                <div class="alert alert-info">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Para configurar alertas tem de fazer login, através do ícone da fechadura, no canto superior direito do ecrã.</strong>
+                    <br />
+                    <strong>Se não tiver conta pode criar uma no mesmo sítio onde efetua o login.</strong>
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

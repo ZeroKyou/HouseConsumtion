@@ -14,6 +14,8 @@
         <link rel="stylesheet" href="{% static 'css/Style.css' %}" />
         <script src="{% static 'js/jquery-3.1.1.js' %}"></script>
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        {% block extra_head %}
+        {% endblock %}
     </head>
     <body>
         <nav class="navbar navbar-default">
@@ -32,7 +34,7 @@
                     <!-- LOGIN -->
                     <ul class="nav navbar-nav navbar-right" id="login-info">
                         {% if user.is_authenticated %}
-                            <p class="navbar-text">Olá {{ user.username }}!
+                            <p class="navbar-text">Olá {{ user.first_name }}!
                                 <small>
                                     <a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
                                 </small>
@@ -47,11 +49,11 @@
 
                     <!-- NAV LINKS -->
                     <ul class="nav navbar-nav" id="menu-items">
-                        <li><a href="#">Contador de Energia</a></li>
-                        <li><a href="#">Contador de Água</a></li>
-                        <li><a href="#">Consumo Total</a></li>
+                        <li><a href="{% url 'electricity_meter' time_period='month' %}">Contador de Eletricidade</a></li>
+                        <li><a href="{% url 'water_meter' time_period='month' %}">Contador de Água</a></li>
+                        <li><a href="{% url 'total_consumption' time_period='month' %}">Consumo Total</a></li>
                         {% if user.is_authenticated %}
-                            <li><a href="#">Configuração</a></li>
+                            <li><a href="#">Alertas</a></li>
                         {% endif %}
                     </ul>
                 </div>

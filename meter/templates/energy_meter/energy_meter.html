@@ -1,2 +1,47 @@
 {% extends "../base.html" %}
+{% load staticfiles %}
 
+{% block extra_head %}
+    <script src="{% static 'js/highcharts.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-12">
+        <!-- Show average current, voltage(currently constant), power-->
+        <div class="container-fluid data-avg">
+            <div class="row">
+                <div class="col-md-offset-3 col-md-2 text-center">
+                    <p title="Média da corrente medida em ampéres.">Média Corrente: <strong>1234</strong>A</p>
+                </div>
+                <div class="col-md-2 text-center">
+                    <p title="Média da tensão medida em volts.">Média Tensão: <strong>130</strong>V</p>
+                </div>
+                <div class="col-md-2 text-center">
+                    <p title="Média da potência medida em watts.">Média Potência: <strong>123421</strong>W</p>
+                </div>
+            </div>
+            <!-- Show if user has added the currency and the price of electricity (kW/h) -->
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p title="Custo mensal calculado.">Custo: <strong>N/D</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Graph plotting here -->
+        <div id="graph-container">
+        </div>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        $({{ chartID|safe }}).highcharts({
+            chart: {{ chart|safe }},
+            title: {{ title|safe }},
+            xAxis: {{ x_axis|safe }},
+            yAxis: {{ y_axis|safe }},
+            series: {{ series|safe }}
+        });
+    });
+    </script>
+{% endblock %}
