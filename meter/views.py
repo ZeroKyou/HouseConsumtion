@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -5,6 +6,9 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from meter.forms import SignupForm
 from meter.db_to_charts_classes import ElectricityGraphData
+from meter.models import Electricity, Settings
+
+from django.http import HttpResponse
 
 
 # Create your views here.
@@ -20,7 +24,7 @@ def login_successful(request):
 
 def logout_successful(request):
     if User.is_authenticated is not True:
-        messages.success(request, "Terminou a sessao.")
+        messages.success(request, "Terminou a sessão.")
     return redirect('index')
 
 
@@ -49,30 +53,43 @@ def signup(request):
 #     ...(database query)...
 #     return render(request, 'energy_meter/energy_meter.html', {[database_data], graph_to_draw})
 def electricity_meter(request, time_period):
+    # cost_kw_h = 1
+    # currency = '€'
+    # if request.user.is_authenticated:
+    #     settings = Settings.objects.filter(user=request.user)
+    #     currency = None
+    #     for setting in settings:
+    #         currency = setting.currency
+    #         cost_kw_h = setting.cost_kw_per_hour
+    #
+    # avg_current = Electricity.objects.get_avg_current(time_period)
+    # avg_voltage = Electricity.objects.get_avg_voltage(time_period)
+    # avg_power = Electricity.objects.get_avg_power(time_period)
+    # cost = Electricity.objects.get_cost(cost_kw_h, time_period)
+    # averages = {'avg_current': avg_current,
+    #             'avg_voltage': avg_voltage,
+    #             'avg_power': avg_power,
+    #             'cost': cost}
+    #
+    # x_axis = {
+    #     "type": "datetime",
+    #     "labels": {"format": "{value:%Y-%m-%d}", "rotation": "45", "align": "left"},
+    #     "dateTimeLabelFormats": {"month": "%e. %b", "year": "%b"}
+    #     }
+    #
+    # return render(request, 'energy_meter/energy_meter.html', {'averages': averages,
+    #                                                           'time_period': time_period,
+    #                                                           'currency': currency})
+    return render(request, 'energy_meter/energy_meter.html', {'time_period': time_period})
+
+
+def electricity_values(request, time_period):
     data = ElectricityGraphData.get_data(time_period)
-
-    if data is None:
-        data = []
-
-    chart = {"renderTo": "graph-container", "type": "line", "height": "500px"}
-    title = {"text": 'Energia Consumida'}
-    x_axis = {"title": {"text": ''}, "categories": data['date']}
-    y_axis = {"title": {"text": 'Data'}}
-    series = [
-        {"name": 'Current (A)', "data": data['current']},
-        {"name": 'Voltage (V)', "data": data['voltage']},
-        {"name": 'Power (W)', "data": data['power']}
-    ]
-
-    return render(request, 'energy_meter/energy_meter.html', {'chart': chart,
-                                                              'title': title,
-                                                              'xAxis': x_axis,
-                                                              'yAxis': y_axis,
-                                                              'series': series})
+    return HttpResponse(data, content_type="application/json")
 
 
 @csrf_exempt
-def add_electricity_reading(request):
+def add_meter_reading(request):
     pass
 
 

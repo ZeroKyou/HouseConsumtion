@@ -6,41 +6,132 @@
 {% endblock %}
 
 {% block content %}
-    <div class="col-md-12">
+    <div id="page-content" class="col-md-12">
         <!-- Show average current, voltage(currently constant), power-->
         <div class="container-fluid data-avg">
             <div class="row">
-                <div class="col-md-offset-3 col-md-2 text-center">
-                    <p title="Média da corrente medida em ampéres.">Média Corrente: <strong>1234</strong>A</p>
-                </div>
-                <div class="col-md-2 text-center">
-                    <p title="Média da tensão medida em volts.">Média Tensão: <strong>130</strong>V</p>
-                </div>
-                <div class="col-md-2 text-center">
-                    <p title="Média da potência medida em watts.">Média Potência: <strong>123421</strong>W</p>
-                </div>
-            </div>
-            <!-- Show if user has added the currency and the price of electricity (kW/h) -->
-            <div class="row">
                 <div class="col-md-12 text-center">
-                    <p title="Custo mensal calculado.">Custo: <strong>N/D</strong></p>
+                    {% if time_period == "year" %}
+                        <p>Média do consumo do ultimo ano:</p>
+                    {% elif time_period == "month" %}
+                        <p>Média do consumo dos ultimos 30 dias:</p>
+                    {% elif time_period == "day" %}
+                        <p>Média do consumo do ultimo dia:</p>
+                    {% endif %}
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-offset-3 col-md-2 text-center">
+                    <p title="Média da corrente medida em ampéres.">Média Corrente: <strong id="avg_c">{{ averages.avg_current }}</strong>A</p>
+                </div>
+                <div class="col-md-2 text-center">
+                    <p title="Média da tensão medida em volts.">Média Tensão: <strong id="avg_v">{{ averages.avg_voltage }}</strong>V</p>
+                </div>
+                <div class="col-md-2 text-center">
+                    <p title="Média da potência medida em watts.">Média Potência: <strong id="avg_p">{{ averages.avg_power }}</strong>W</p>
+                </div>
+            </div>
+            {% if user.is_authenticated %}
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <p title="Custo calculado.">Custo: <strong id="cost">{{ averages.cost }}{{ currency }}</strong></p>
+                        </div>
+                    </div>
+            {% endif %}
         </div>
 
         <!-- Graph plotting here -->
-        <div id="graph-container">
+        <div id="graph-container" style="margin-top:10px;">
         </div>
     </div>
+{% endblock %}
 
+{% block extra_js %}
     <script>
+    var chart;
+
+    function requestData() {
+        $.ajax({
+            url: '{% url 'electricity_values' time_period=time_period %}',
+            success: function(data) {
+                var series = chart.series[0],
+                    shift = series.data.length > 20; // shift if the series is longer than 20
+
+                $('#avg_c').html(data['avg_c'])
+                $('#avg_v').html(data['avg_v'])
+                $('#avg_p').html(data['avg_p'])
+
+                // add the point
+                chart.series[0].setData(data['current']);
+                chart.series[1].setData(data['voltage']);
+                chart.series[2].setData(data['power']);
+
+                // call it again after one second
+                setTimeout(requestData, 1000);
+            },
+            cache: false
+        });
+	}
+
     $(document).ready(function() {
-        $({{ chartID|safe }}).highcharts({
-            chart: {{ chart|safe }},
-            title: {{ title|safe }},
-            xAxis: {{ x_axis|safe }},
-            yAxis: {{ y_axis|safe }},
-            series: {{ series|safe }}
+
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'graph-container',
+                defaultSeriesType: 'line',
+                events: {
+                    load: requestData
+                }
+            },
+            title: {
+                {% if time_period == "year" %}
+                    text: "Consumo do último ano"
+                {% elif time_period == "month" %}
+                    text: "Consumo dos últimos 30 dias"
+                {% elif time_period == "day" %}
+                    text: "Consumo do último dia"
+                {% endif %}
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -70,
+                y: 30,
+                floating: true,
+                backgroundColor: '#ffffff',
+                borderWidth: 1
+            },
+            xAxis: {
+                type: 'datetime',
+                labels: {
+                    format: '{value:%Y-%m-%d}',
+                    rotation: 45,
+                    align: 'left'
+                },
+            },
+            yAxis: {
+                minPadding: 0.2,
+                maxPadding: 0.2,
+                type: 'logarithmic',
+                title: {
+                    text: 'Valores',
+                }
+            },
+            series: [
+                {
+                    name: 'Corrente',
+                    data: []
+                },
+                {
+                    name: 'Tensão',
+                    data: []
+                },
+                {
+                    name: 'Potência',
+                    data: []
+                },
+            ]
         });
     });
     </script>

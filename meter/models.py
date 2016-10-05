@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from meter.managers import ElectricityManager
 
 
 class Electricity(models.Model):
@@ -14,15 +15,18 @@ class Electricity(models.Model):
     voltage = models.FloatField(default=230.0)
     date = models.DateTimeField(default=timezone.now)
 
+    objects = ElectricityManager()
+
     @property
     def power(self):
         return self.voltage * self.current
 
     def __str__(self):
-        return "Current: {0}, Voltage: {1}, Power: {2}\n".format(
+        return "Current: {0}, Voltage: {1}, Power: {2}, Date: {3}\n".format(
             self.current,
             self.voltage,
-            self.power)
+            self.power,
+            self.date)
 
 
 class Settings(models.Model):
@@ -38,7 +42,7 @@ class Settings(models.Model):
         User,
         on_delete=models.CASCADE,
         primary_key=True)
-    cost_kw_per_hour = models.FloatField(default=None, null=True)
+    cost_kw_per_hour = models.FloatField(default=1, null=False)
     send_email = models.BooleanField(default=False)
     currency = models.CharField(
         max_length=6,
