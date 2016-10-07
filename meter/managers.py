@@ -1,70 +1,39 @@
 from django.db.models import Manager, Avg
-from django.utils import timezone
 
 
 class ElectricityManager(Manager):
 
-    def get_avg_current(self, time_period="month"):
-
-        current_date = timezone.now()
-
-        if time_period == "year":
-            start_date = current_date + timezone.timedelta(days=-365)  # one year ago
-        elif time_period == "month":
-            start_date = current_date + timezone.timedelta(days=-30)  # one month ago
-        elif time_period == "day":
-            start_date = current_date + timezone.timedelta(days=-1)  # one day ago
-
-        avg_current = self.filter(date__range=(start_date, current_date)).aggregate(Avg('current'))
-
+    def get_avg_current(self, start_date, end_date):
+        avg_current = self.filter(date__gte=start_date, date__lt=end_date).aggregate(Avg('current'))
+        if avg_current['current__avg'] is None:
+            return 0
         return round(avg_current['current__avg'], 2)
 
-    def get_avg_voltage(self, time_period="month"):
-
-        current_date = timezone.now()
-
-        if time_period == "year":
-            start_date = current_date + timezone.timedelta(days=-365)   # one year ago
-        elif time_period == "month":
-            start_date = current_date + timezone.timedelta(days=-30)    # one month ago
-        elif time_period == "day":
-            start_date = current_date + timezone.timedelta(days=-1)     # one day ago
-
-        avg_voltage = self.filter(date__range=(start_date, current_date)).aggregate(Avg('voltage'))
-
+    def get_avg_voltage(self, start_date, end_date):
+        avg_voltage = self.filter(date__gte=start_date, date__lt=end_date).aggregate(Avg('voltage'))
+        if avg_voltage['voltage__avg'] is None:
+            return 0
         return avg_voltage['voltage__avg']
 
-    def get_avg_power(self, time_period="month"):
-
-        current_date = timezone.now()
+    def get_avg_power(self, start_date, end_date):
         avg_power = 0
+        results = self.filter(date__gte=start_date, date__lt=end_date)
 
-        if time_period == "year":
-            start_date = current_date + timezone.timedelta(days=-365)  # one year ago
-        elif time_period == "month":
-            start_date = current_date + timezone.timedelta(days=-30)  # one month ago
-        elif time_period == "day":
-            start_date = current_date + timezone.timedelta(days=-1)  # one day ago
-
-        results = self.filter(date__range=(start_date, current_date))
+        if not results.exists():
+            return 0
 
         for result in results:
             avg_power += result.power
 
-        return round(avg_power, 2)
+        return round(avg_power/len(results), 2)
 
-    def get_cost(self, cost_kw_h, time_period="month"):
-
-        avg_power = self.get_avg_power(time_period)
-
-        if time_period == "year":
-            hours = 365 * 24
-        elif time_period == "month":
-            hours = 30 * 24
-        elif time_period == "day":
-            hours = 24
-
-        avg_power_kw = avg_power/1000
-        cost = avg_power_kw*hours*cost_kw_h
-
+    def get_cost(self, cost_kw_h, start_date, end_date):
+        avg_power = self.get_avg_power(start_date, end_date)
+        results = self.filter(date__gte=start_date, date__lt=end_date)
+        date_first_reading = results.first().date
+        date_last_reading = results.last().date
+        hours = date_last_reading - date_first_reading
+        hours = max(1, float(hours.total_seconds()) / 3600)
+        avg_power_kw = float(avg_power)/1000
+        cost = hours * avg_power_kw * cost_kw_h
         return round(cost, 2)

@@ -49,9 +49,30 @@
 
                     <!-- NAV LINKS -->
                     <ul class="nav navbar-nav" id="menu-items">
-                        <li><a href="{% url 'electricity_meter' time_period='month' %}">Contador de Eletricidade</a></li>
-                        <li><a href="{% url 'water_meter' time_period='month' %}">Contador de Água</a></li>
-                        <li><a href="{% url 'total_consumption' time_period='month' %}">Consumo Total</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" area-haspopup="true" aria-expanded="false">
+                                Contador de Eletricidade<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{% url 'electricity_meter' time_period='year' %}">Último ano</a>
+                                    <a href="{% url 'electricity_meter' time_period='month' %}">Último mês</a>
+                                    <a href="{% url 'electricity_meter' time_period='actual' %}">Actual</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" area-haspopup="true" aria-expanded="false">
+                                Contador de Água<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{% url 'water_meter' time_period='year' %}">Último ano</a>
+                                    <a href="{% url 'water_meter' time_period='month' %}">Último mês</a>
+                                    <a href="{% url 'water_meter' time_period='actual' %}">Actual</a>
+                                </li>
+                            </ul>
+                        </li>
                         {% if user.is_authenticated %}
                             <li><a href="#">Alertas</a></li>
                         {% endif %}
@@ -65,7 +86,5 @@
                     {% endblock %}
             </div>
         </div>
-        {% block extra_js %}
-        {% endblock %}
     </body>
 </html>

@@ -8,7 +8,7 @@ from meter.managers import ElectricityManager
 class Electricity(models.Model):
     '''
     Model for storing current, voltage and power readings
-    and the date they reached the server.
+    and the date they've reached the server.
     '''
 
     current = models.FloatField()
@@ -29,30 +29,37 @@ class Electricity(models.Model):
             self.date)
 
 
+class Water(models.Model):
+    '''
+    Model for storing number of liters of water read, and the date
+    they've reached the server.
+    '''
+    liters = models.FloatField()
+    date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return "Liters: {0}, Date: {1}\n".format(self.liters, self.date)
+
+
 class Settings(models.Model):
     '''
     Model that represents each user's website settings
     '''
 
-    CURRENCY_OPTIONS = (
-        ("eur", "euro"),
-        ("usd", "us dollar"))
-
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         primary_key=True)
-    cost_kw_per_hour = models.FloatField(default=1, null=False)
+    cost_kw_per_hour = models.FloatField(default=0.19, null=False)
+    cost_liter = models.FloatField(default=0.9, null=False)
+    power_warning = models.FloatField()
+    liters_warning = models.FloatField()
     send_email = models.BooleanField(default=False)
-    currency = models.CharField(
-        max_length=6,
-        choices=CURRENCY_OPTIONS,
-        default="eur"
-    )
 
     def __str__(self):
-        return "User: {0}, Cost(kW/h): {1}, Send email: {2}, Currency: {3}\n".format(
+        return """User: {0}, Electricity Cost(kW/h): {1}, Water Cost(l): {2}, Send email: {3}, Power Warning: {4},
+         Liters Warning; {5}\n""".format(
             self.user.username,
             self.cost_kw_per_hour,
-            self.send_email,
-            self.currency)
+            self.cost_liter,
+            self.send_email)

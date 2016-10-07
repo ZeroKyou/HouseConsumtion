@@ -6,7 +6,7 @@
 #menu-navbar{
     font-family: Anton;
 }
-    #menu-navbar li:hover{
+    #menu-navbar a:hover{
         background:#eee;
     }
         #menu-navbar>ul>li>a:hover{
@@ -78,6 +78,17 @@
             color:#999;
             font-family: Anton;
         }
+    .show-avg-data{
+        display:none;
+    }
+    .show-no-avg-data{
+        display:none;
+    }
+
+#graph-container{
+    margin-top:10px;
+    max-height:400px
+}
 
 @media(max-width:768px){
     #content-wrapper{

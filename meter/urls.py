@@ -11,6 +11,4 @@ urlpatterns = [
     url(r'^meter/meter/reading/$', views.add_meter_reading, name='add_meter_reading'),
     url(r'^meter/water/$', views.water_meter, name='water_meter'),
     url(r'^meter/water/(?P<time_period>\w+)/$', views.water_meter, name='water_meter'),
-    url(r'^meter/water/reading/$', views.add_water_reading, name='add_water_reading'),
-    url(r'^meter/total/(?P<time_period>\w+)/$', views.total_consumption, name='total_consumption'),
 ]
