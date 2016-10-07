@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-from meter.managers import ElectricityManager
+from meter.managers import ElectricityManager, WaterManager
 
 
 class Electricity(models.Model):
@@ -36,6 +36,8 @@ class Water(models.Model):
     '''
     liters = models.FloatField()
     date = models.DateTimeField(default=timezone.now)
+
+    objects = WaterManager()
 
     def __str__(self):
         return "Liters: {0}, Date: {1}\n".format(self.liters, self.date)

@@ -1,4 +1,4 @@
-from django.db.models import Manager, Avg
+from django.db.models import Manager, Avg, Sum
 
 
 class ElectricityManager(Manager):
@@ -37,3 +37,16 @@ class ElectricityManager(Manager):
         avg_power_kw = float(avg_power)/1000
         cost = hours * avg_power_kw * cost_kw_h
         return round(cost, 2)
+
+
+class WaterManager(Manager):
+
+    def get_total_liters(self, start_date, end_date):
+        total_liters = self.filter(date__gte=start_date, date__lt=end_date).aggregate(Sum('liters'))
+        if total_liters['liters__avg'] is None:
+            return 0
+        return total_liters['liters__avg']
+
+    def get_cost(self, cost_l, start_date, end_date):
+        total_liters = self.get_total_liters(start_date, end_date)
+        return total_liters * cost_l

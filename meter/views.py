@@ -50,8 +50,6 @@ def electricity_meter(request, time_period):
 
 
 def electricity_values(request, time_period):
-    if time_period not in ['year', 'month', 'actual']:
-        return page_not_found(request)
     if request.user.is_authenticated:
         settings = Settings.objects.filter(user=request.user).first()
         if settings is not None:
@@ -61,10 +59,6 @@ def electricity_values(request, time_period):
     else:
         data = ElectricityGraphData().get_data(time_period, 0)
     return HttpResponse(data, content_type="application/json")
-
-
-def page_not_found(request):
-    return HttpResponseNotFound("A página " + request.url + " não existe :(");
 
 
 @csrf_exempt
