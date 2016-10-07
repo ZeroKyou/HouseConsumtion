@@ -53,13 +53,15 @@ class Settings(models.Model):
     cost_kw_per_hour = models.FloatField(default=0.19, null=False)
     cost_liter = models.FloatField(default=0.9, null=False)
     power_warning = models.FloatField()
-    liters_warning = models.FloatField()
+    water_liters_warning = models.FloatField()
     send_email = models.BooleanField(default=False)
 
     def __str__(self):
         return """User: {0}, Electricity Cost(kW/h): {1}, Water Cost(l): {2}, Send email: {3}, Power Warning: {4},
-         Liters Warning; {5}\n""".format(
+         Water Liters Warning; {5}\n""".format(
             self.user.username,
             self.cost_kw_per_hour,
             self.cost_liter,
-            self.send_email)
+            self.send_email,
+            self.power_warning,
+            self.water_liters_warning)
