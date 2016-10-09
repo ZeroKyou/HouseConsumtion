@@ -90,6 +90,22 @@
     max-height:400px
 }
 
+#settings-form{
+    width:500px;
+    padding:10px 10px 10px 10px;
+    background:#eee;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+    #settings-form .col-form-label{
+        line-height:30px;
+    }
+
+.toggle-visibility{
+    display:none;
+}
+
 @media(max-width:768px){
     #content-wrapper{
         padding-left:1%;
@@ -123,5 +139,9 @@
 
     .alert span{
         clear:right;
+    }
+    #settings-form{
+        width:100%;
+        margin:0px;
     }
 }

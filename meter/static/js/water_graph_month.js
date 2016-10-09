@@ -3,14 +3,13 @@ var chart;
 
 function requestData() {
     $.ajax({
-        url: '/meter/electricity/month/values/',
+        url: '/meter/water/month/values/',
         success: function(data) {
-            if ((typeof data != undefined) && (data.current != undefined) && (data.current.length > 0)) {
+            if ((typeof data != undefined) && (data.day_l != undefined) && (data.day_l.length > 0)) {
                 $('.show-avg-data').toggle(true);
                 $('.show-no-avg-data').toggle(false);
-                $('#avg_c').html(data['avg_c']);
-                $('#avg_v').html(data['avg_v']);
-                $('#avg_p').html(data['avg_p']);
+                $('#total_l').html(data['total_l']);
+                $('#total_m3').html(data['total_m3']);
                 $('#cost').html(data['cost'] + '€');
                 chart.legend.group.show();
                 chart.legend.box.show();
@@ -25,9 +24,8 @@ function requestData() {
             }
 
             // Add points
-            chart.series[0].setData(data['current']);
-            chart.series[1].setData(data['voltage']);
-            chart.series[2].setData(data['power']);
+            chart.series[0].setData(data['day_l']);
+            chart.series[1].setData(data['day_m3']);
 
             // Call it again every one second
             setTimeout(requestData, 1000);
@@ -72,17 +70,11 @@ $(document).ready(function() {
                 var options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
                 date = new Date(this.x).toLocaleDateString('pt-PT', options);
                 text = "<strong>"+date+"</strong><br />"
-                if(this.series.name == 'Corrente') {
-                    text += this.y + "A";
+                if(this.series.name == 'Litros') {
+                    text += this.y + "l";
                 }
-                else if(this.series.name == 'Tensão') {
-                    var options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-                    date = new Date(this.x).toLocaleDateString('pt-PT', options);
-                    text = "<strong>"+date+"</strong><br />"
-                    text += this.y + "V";
-                }
-                if(this.series.name == 'Potência') {
-                    text += this.y + "W";
+                else if(this.series.name == 'Metros Cúbicos') {
+                    text += this.y + "m³";
                 }
                 return text;
             }
@@ -100,15 +92,11 @@ $(document).ready(function() {
         },
         series: [
             {
-                name: 'Corrente',
+                name: 'Litros',
                 data: []
             },
             {
-                name: 'Tensão',
-                data: []
-            },
-            {
-                name: 'Potência',
+                name: 'Metros Cúbicos',
                 data: []
             },
         ]

@@ -3,6 +3,11 @@ from django.db.models import Manager, Avg, Sum
 
 class ElectricityManager(Manager):
 
+    def save_reading(self, irms):
+        # Divide irms by 1000 or do right shift
+        irms = round(float(irms/1000), 2)
+        self.create(current=irms)
+
     def get_avg_current(self, start_date, end_date):
         avg_current = self.filter(date__gte=start_date, date__lt=end_date).aggregate(Avg('current'))
         if avg_current['current__avg'] is None:
@@ -41,12 +46,28 @@ class ElectricityManager(Manager):
 
 class WaterManager(Manager):
 
+    def save_reading(self, water_meter_cycles):
+        # Each water meter cycle
+        self.create(liters=water_meter_cycles*0.5)
+
     def get_total_liters(self, start_date, end_date):
         total_liters = self.filter(date__gte=start_date, date__lt=end_date).aggregate(Sum('liters'))
-        if total_liters['liters__avg'] is None:
+        if total_liters['liters__sum'] is None:
             return 0
-        return total_liters['liters__avg']
+        return total_liters['liters__sum']
 
-    def get_cost(self, cost_l, start_date, end_date):
-        total_liters = self.get_total_liters(start_date, end_date)
-        return total_liters * cost_l
+    def get_total_m3(self, start_date, end_date):
+        total_m3 = 0
+        results = self.filter(date__gte=start_date, date__lt=end_date)
+
+        if not results.exists():
+            return 0
+
+        for result in results:
+            total_m3 += result.cubic_meters
+
+        return total_m3
+
+    def get_cost(self, cost_m3, start_date, end_date):
+        total_m3 = self.get_total_m3(start_date, end_date)
+        return total_m3 * cost_m3

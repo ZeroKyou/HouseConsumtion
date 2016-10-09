@@ -12,18 +12,24 @@ function requestData() {
                 $('#avg_v').html(data['avg_v']);
                 $('#avg_p').html(data['avg_p']);
                 $('#cost').html(data['cost'] + '€');
+                chart.legend.group.show();
+                chart.legend.box.show();
+                chart.legend.display = true;
             }
             else{
                 $('.show-avg-data').toggle(false);
                 $('.show-no-avg-data').toggle(true);
+                chart.legend.group.show();
+                chart.legend.box.show();
+                chart.legend.display = true;
             }
 
-            // add the point
+            // Add points
             chart.series[0].setData(data['current']);
             chart.series[1].setData(data['voltage']);
             chart.series[2].setData(data['power']);
 
-            // call it again after one second
+            // Call it again every one second
             setTimeout(requestData, 1000);
         },
         cache: false
@@ -63,16 +69,14 @@ $(document).ready(function() {
             shared: false,
             formatter: function(){
                 var text = '';
+                text += "<strong>" + this.x + "</strong><br />";
                 if(this.series.name == 'Corrente') {
-                    text += "<strong>" + this.x + "</strong><br />";
                     text += this.y + "A";
                 }
                 else if(this.series.name == 'Tensão') {
-                    text += "<strong>" + this.x + "</strong><br />";
                     text += this.y + "V";
                 }
                 if(this.series.name == 'Potência') {
-                    text += "<strong>" + this.x + "</strong><br />";
                     text += this.y + "W";
                 }
                 return text;

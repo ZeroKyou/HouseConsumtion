@@ -20,9 +20,9 @@
             <div class="row">
                 <div class="col-md-12 text-center">
                     {% if time_period == "year" %}
-                        <p>Média do consumo do ultimo ano:</p>
+                        <p>Média do consumo do último ano:</p>
                     {% elif time_period == "month" %}
-                        <p>Média do consumo dos ultimos 30 dias:</p>
+                        <p>Média do consumo dos últimos 30 dias:</p>
                     {% elif time_period == "actual" %}
                         <p>Média da última hora:</p>
                     {% endif %}
@@ -30,19 +30,19 @@
             </div>
             <div class="row show-avg-data">
                 <div class="col-md-offset-3 col-md-2 text-center">
-                    <p title="Média da corrente medida em ampéres.">Média Corrente: <strong id="avg_c">{{ averages.avg_current }}</strong>A</p>
+                    <p title="Média da corrente medida em ampéres.">Média Corrente: <strong id="avg_c"></strong>A</p>
                 </div>
                 <div class="col-md-2 text-center">
-                    <p title="Média da tensão medida em volts.">Média Tensão: <strong id="avg_v">{{ averages.avg_voltage }}</strong>V</p>
+                    <p title="Média da tensão medida em volts.">Média Tensão: <strong id="avg_v"></strong>V</p>
                 </div>
                 <div class="col-md-2 text-center">
-                    <p title="Média da potência medida em watts.">Média Potência: <strong id="avg_p">{{ averages.avg_power }}</strong>W</p>
+                    <p title="Média da potência medida em watts.">Média Potência: <strong id="avg_p"></strong>W</p>
                 </div>
             </div>
             {% if user.is_authenticated %}
                 <div class="row show-avg-data">
                     <div class="col-md-12 text-center">
-                        <p title="Custo calculado.">Custo: <strong id="cost">{{ averages.cost }}{{ currency }}</strong></p>
+                        <p title="Custo calculado.">Custo: <strong id="cost"></strong></p>
                     </div>
                 </div>
             {% endif %}

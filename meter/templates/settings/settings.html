@@ -1,0 +1,80 @@
+{% extends "../base.html" %}
+{% load staticfiles %}
+
+{% block extra_head %}
+    <script src="{% static 'js/show_when_checked.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <h1>Configurações</h1>
+    <br />
+    <div class="container">
+        <div class="alert alert-info">
+            <strong>Info:</strong> Aqui pode alterar o valor que paga pela eletricidade e pela água,
+            para além de poder ativar alertas por email.<br />
+            Estes alertas vão notificá-lo sempre que a potência instantânea ou o consumo instantêneo
+            de litros de água excederem os valores inseridos.
+        </div>
+        {% if form_settings.errors or form_email.errors %}
+            <div class="alert alert-warning fade in">
+                {% for error in form_settings.errors.values %}
+                    {{ error }}
+                {% endfor %}
+                {% for error in form_email.errors.values %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="row" id="settings-form">
+            <form method="POST" class="form-horizontal">{% csrf_token %}
+                {% for field in form_email %}
+                    <div class="form-group row">
+                        <label class="col-sm-5 col-form-label" for="{{ field.auto_id }}">
+                            {{ field.label }}
+                        </label>
+                        <div class="col-sm-7">
+                            {{ field }}
+                        </div>
+                    </div>
+                {% endfor %}
+                {% for field in form_settings %}
+                    {% if field.name == "power_warning" or field.name == "liters_warning" %}
+                        <div class="form-group row toggle-visibility">
+                            <label class="col-sm-5 col-form-label" for="{{ field.auto_id }}">
+                                {{ field.label }}
+                            </label>
+                            <div class="col-sm-7">
+                                {{ field }}
+                            </div>
+                        </div>
+                    {% elif field.name == "send_email" %}
+                        <div class="form-group row">
+                            <div class="col-sm-offset-5 col-sm-9">
+                                <div class="checkbox">
+                                    <label>
+                                        {{ field }}
+                                        {{ field.label }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="form-group row">
+                            <label class="col-sm-5 col-form-label" for="{{ field.auto_id }}">
+                                {{ field.label }}
+                            </label>
+                            <div class="col-sm-7">
+                                {{ field }}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <div class="form-group last">
+                    <div class="col-sm-offset-5 col-sm-12 text-left">
+                        <button type="submit" class="btn btn-primary">Gravar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

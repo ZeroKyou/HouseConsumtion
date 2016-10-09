@@ -1,4 +1,56 @@
 {% extends "../base.html" %}
+{% load staticfiles %}
+
+{% block extra_head %}
+    <script src="{% static 'js/highcharts.js' %}"></script>
+    <script src="{% static 'js/no-data-to-display.js' %}"></script>
+    {% if time_period == 'year' %}
+        <script src="{% static 'js/water_graph_year.js' %}"></script>
+    {% elif time_period == 'month' %}
+        <script src="{% static 'js/water_graph_month.js' %}"></script>
+    {% elif time_period == 'actual' %}
+        <script src="{% static 'js/water_graph_actual.js' %}"></script>
+    {% endif %}
+{% endblock %}
 
 {% block content %}
+    <div id="page-content" class="col-md-12">
+        <!-- Show total water consumption-->
+        <div class="container-fluid data-avg">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    {% if time_period == "year" %}
+                        <p>Total do consumo do último ano:</p>
+                    {% elif time_period == "month" %}
+                        <p>Total do consumo dos últimos 30 dias:</p>
+                    {% elif time_period == "actual" %}
+                        <p>Total do consumo da última hora:</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row show-avg-data">
+                <div class="col-md-offset-3 col-md-3 text-center">
+                    <p title="Total do consumo em litros.">Total Litros: <strong id="total_l"></strong>l</p>
+                </div>
+                <div class="col-md-3 text-center">
+                    <p title="Total do consumo em metros cúbicos.">Total m³: <strong id="total_m3"></strong>m³</p>
+                </div>
+            </div>
+            {% if user.is_authenticated %}
+                <div class="row show-avg-data">
+                    <div class="col-md-12 text-center">
+                        <p title="Custo calculado.">Custo: <strong id="cost"></strong></p>
+                    </div>
+                </div>
+            {% endif %}
+                <div class="col-md-12 text-center show-no-avg-data">
+                    <p>Não existem dados a apresentar.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Graph plotting here -->
+        <div id="graph-container">
+        </div>
+    </div>
 {% endblock %}

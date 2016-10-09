@@ -6,7 +6,7 @@ function requestData() {
         url: '/meter/electricity/actual/values/',
         success: function(data) {
             var series = chart.series[0],
-                shift = series.data.length > 20; // shift if the series is longer than 20
+            shift = series.data.length > 10; // shift if the series is longer than 20
 
             if ((typeof data != undefined) && (data.current != undefined) && (data.current.length > 0)) {
                 $('.show-avg-data').toggle(true);
@@ -72,22 +72,16 @@ $(document).ready(function() {
             shared: false,
             formatter: function(){
                 var text = '';
+                var options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+                date = new Date(this.x);
+                text = "<strong>Hora: "+date.getHours()+"h"+date.getMinutes()+"m"+date.getSeconds()+"s</strong><br />";
                 if(this.series.name == 'Corrente') {
-                    var options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-                    date = new Date(this.x);
-                    text = "<strong>"+date.getHours()+"h"+date.getMinutes()+"m"+date.getSeconds()+"s</strong><br />";
                     text += this.y + "A";
                 }
                 else if(this.series.name == 'Tensão') {
-                    var options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-                    date = new Date(this.x);
-                    text = "<strong>Hora: "+date.getHours()+"h"+date.getMinutes()+"m"+date.getSeconds()+"s</strong><br />";
                     text += this.y + "V";
                 }
                 if(this.series.name == 'Potência') {
-                    var options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-                    date = new Date(this.x);
-                    text = "<strong>Hora: "+date.getHours()+"h"+date.getMinutes()+"m"+date.getSeconds()+"s</strong><br />";
                     text += this.y + "W";
                 }
                 return text;
