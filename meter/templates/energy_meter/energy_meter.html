@@ -4,13 +4,7 @@
 {% block extra_head %}
     <script src="{% static 'js/highcharts.js' %}"></script>
     <script src="{% static 'js/no-data-to-display.js' %}"></script>
-    {% if time_period == 'year' %}
-        <script src="{% static 'js/energy_graph_year.js' %}"></script>
-    {% elif time_period == 'month' %}
-        <script src="{% static 'js/energy_graph_month.js' %}"></script>
-    {% elif time_period == 'actual' %}
-        <script src="{% static 'js/energy_graph_actual.js' %}"></script>
-    {% endif %}
+    <script src="{% static 'js/highcharts_graph.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -23,7 +17,7 @@
                         <p>Média do consumo do último ano:</p>
                     {% elif time_period == "month" %}
                         <p>Média do consumo dos últimos 30 dias:</p>
-                    {% elif time_period == "actual" %}
+                    {% elif time_period == "recent" %}
                         <p>Média da última hora:</p>
                     {% endif %}
                 </div>

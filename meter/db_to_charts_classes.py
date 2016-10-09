@@ -175,8 +175,8 @@ class WaterGraphData(object):
         :return: serialized dictionary as a json string with the wanted readings (cubic meters and liters of water)
         '''
         data = {
-            'month_l': [],
-            'month_m3': [],
+            'liters': [],
+            'cubic_meters': [],
             'total_l': [],
             'total_m3': [],
             'cost': [],
@@ -187,10 +187,10 @@ class WaterGraphData(object):
         for month in range(1, current_date.month + 1):
             end_date = timezone.datetime(current_date.year, month + 1, 1)
             end_date = timezone.make_aware(end_date, timezone.get_default_timezone())
-            month_l = Water.objects.get_total_liters(start_date, end_date)
-            month_m3 = Water.objects.get_total_m3(start_date, end_date)
-            data['month_l'].append(month_l)
-            data['month_m3'].append(month_m3)
+            liters = Water.objects.get_total_liters(start_date, end_date)
+            cubic_meters = Water.objects.get_total_m3(start_date, end_date)
+            data['liters'].append(liters)
+            data['cubic_meters'].append(cubic_meters)
             start_date = end_date
 
         start_date = timezone.datetime(current_date.year, 1, 1)
@@ -210,8 +210,8 @@ class WaterGraphData(object):
         :return: serialized dictionary as a json string with the wanted readings (cubic meters and liters of water)
         '''
         data = {
-            'day_l': [],
-            'day_m3': [],
+            'liters': [],
+            'cubic_meters': [],
             'total_l': [],
             'total_m3': [],
             'cost': [],
@@ -226,12 +226,12 @@ class WaterGraphData(object):
         for day in range(1, 31):
             start_date_js = int(time.mktime(start_date.timetuple())) * 1000
             end_date = end_date + one_day
-            day_l = Water.objects.get_total_liters(start_date, end_date)
-            day_m3 = Water.objects.get_total_m3(start_date, end_date)
-            day_l = [start_date_js, day_l]
-            day_m3 = [start_date_js, day_m3]
-            data['day_l'].append(day_l)
-            data['day_m3'].append(day_m3)
+            liters = Water.objects.get_total_liters(start_date, end_date)
+            cubic_meters = Water.objects.get_total_m3(start_date, end_date)
+            liters = [start_date_js, liters]
+            cubic_meters = [start_date_js, cubic_meters]
+            data['liters'].append(liters)
+            data['cubic_meters'].append(cubic_meters)
             start_date = end_date
 
         start_date = current_date + thirty_days_ago

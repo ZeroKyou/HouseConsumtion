@@ -45,6 +45,8 @@ def signup(request):
 
 
 def electricity_meter(request, time_period):
+    if time_period == "":
+        return redirect('electricity_meter', time_period="year")
     return render(request, 'energy_meter/energy_meter.html', {'time_period': time_period})
 
 
@@ -61,6 +63,8 @@ def electricity_values(request, time_period):
 
 
 def water_meter(request, time_period):
+    if time_period == "":
+        return redirect('water_meter', time_period="year")
     return render(request, 'water_meter/water_meter.html', {'time_period': time_period})
 
 
