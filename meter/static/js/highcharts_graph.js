@@ -229,13 +229,12 @@ $(document).ready(function() {
                 }
             });
             switch(graph_type){
-                case 'eletricity':
+                case 'electricity':
                     Highcharts.setOptions({
                         tooltip: {
                             shared: false,
                             formatter: function(){
                                 var text = '';
-                                var options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
                                 date = new Date(this.x);
                                 text = "<strong>Hora: "+date.getHours()+"h"+date.getMinutes()+"m"+date.getSeconds()+"s</strong><br />";
                                 if(this.series.name == 'Corrente') {
