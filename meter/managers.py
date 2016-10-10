@@ -47,7 +47,6 @@ class ElectricityManager(Manager):
 class WaterManager(Manager):
 
     def save_reading(self, water_meter_cycles):
-        # Each water meter cycle
         self.create(liters=water_meter_cycles*0.5)
 
     def get_total_liters(self, start_date, end_date):
@@ -71,3 +70,25 @@ class WaterManager(Manager):
     def get_cost(self, cost_m3, start_date, end_date):
         total_m3 = self.get_total_m3(start_date, end_date)
         return total_m3 * cost_m3
+
+
+class SettingsManager(Manager):
+
+    def send_email(self, values):
+        '''
+        Returns a list of user emails whose Settings' "send_email" attribute is True
+        and "power_warning" and "liters_warning" are less than the ones provided in "values"
+        :param values: power and liters of water read
+        :return: List of emails
+        '''
+        emails = []
+        power = values['power']
+        water_liters = values['water_liters']
+        users_to_send_email = self.filter(send_email=True)
+        users_settings = users_to_send_email.filter(
+            power_warning__lt=power) | users_to_send_email.filter(liters_warning__lt=water_liters)
+        if users_settings.exists():
+            for user_settings in users_settings:
+                if user_settings.ok_to_send():
+                    emails.append(user_settings.user.email)
+        return emails

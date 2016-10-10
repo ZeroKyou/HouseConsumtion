@@ -3,7 +3,7 @@ var time_period;
 var graph_type;
 var chart_title = {'year': 'Consumo do último ano',
                    'month': 'Consumo dos últimos 30 dias',
-                   'recent': 'Consumo do último minuto'};
+                   'recent': 'Consumo da última hora'};
 var chart_series = {'electricity': [{
                                         name: 'Corrente',
                                         data: []
@@ -27,16 +27,6 @@ var chart_series = {'electricity': [{
                               }
                              ]
                     };
-var chart_xaxis = {'year': {categories: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez']},
-                   'month': {type: 'datetime'},
-                   'recent': {
-                                type: 'datetime',
-                                tickInterval: 5 * 1000, // every 5 seconds
-                                labels: {
-                                    format: '{value:%H:%M:%S}'
-                                }
-                             }
-                   };
 
 function get_graph_type(){
     var href = $(location).attr('href');
@@ -91,9 +81,9 @@ function requestData() {
             else{
                 $('.show-avg-data').toggle(false);
                 $('.show-no-avg-data').toggle(true);
-                chart.legend.group.show();
-                chart.legend.box.show();
-                chart.legend.display = true;
+                chart.legend.group.hide();
+                chart.legend.box.hide();
+                chart.legend.display = false;
             }
 
             // Call it again every one second
@@ -105,6 +95,13 @@ function requestData() {
 
 $(document).ready(function() {
     get_graph_type();
+
+    Highcharts.setOptions({
+        lang: {noData: "Não existem dados a apresentar :("},
+        global: {
+            timezoneOffset: -60
+        }
+    });
 
     switch(time_period){
         case 'year':
@@ -216,13 +213,8 @@ $(document).ready(function() {
 
         case 'recent':
             Highcharts.setOptions({
-                lang: {noData: "Não existem dados a apresentar :("},
-                global: {
-                    timezoneOffset: -60
-                },
                 xAxis: {
                     type: 'datetime',
-                    tickInterval: 5 * 1000, // every 5 seconds
                     labels: {
                         format: '{value:%H:%M:%S}'
                     }

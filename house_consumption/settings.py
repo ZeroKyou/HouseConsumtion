@@ -35,6 +35,17 @@ ALLOWED_HOSTS = []
 
 LOGIN_REDIRECT_URL = 'login_successful'
 
+
+# Email configuration
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'hc_admin'
+EMAIL_HOST_PASSWORD = 'ProjetoFinal9119'
+EMAIL_PORT = 587
+
+
 # Application definition
 
 INSTALLED_APPS = [

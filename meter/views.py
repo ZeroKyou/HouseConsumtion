@@ -100,7 +100,9 @@ def settings(request):
 @csrf_exempt
 def add_meter_reading(request):
     if request.method == "POST":
-        irms = request.method.POST['irms']
-        water_cycles = request.method.POST['water_cycles']
+        irms = int(request.POST['irms'])
+        water_meter_cycles = int(request.POST['water_meter_cycles'])
         Electricity.objects.save_reading(irms)
-        Water.objects.save_reading(water_cycles)
+        Water.objects.save_reading(water_meter_cycles)
+        return HttpResponse(200)
+    return redirect('index')
