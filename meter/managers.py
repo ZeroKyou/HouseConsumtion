@@ -47,7 +47,8 @@ class ElectricityManager(Manager):
 class WaterManager(Manager):
 
     def save_reading(self, water_meter_cycles):
-        self.create(liters=water_meter_cycles*0.5)
+        liters = float(water_meter_cycles*0.5)
+        self.create(liters=liters)
 
     def get_total_liters(self, start_date, end_date):
         total_liters = self.filter(date__gte=start_date, date__lt=end_date).aggregate(Sum('liters'))
