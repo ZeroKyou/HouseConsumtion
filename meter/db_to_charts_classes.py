@@ -53,10 +53,16 @@ class ElectricityGraphData(object):
         start_date = timezone.datetime(current_date.year, 1, 1)
         start_date = timezone.make_aware(start_date, timezone.get_default_timezone())
         current_date = timezone.make_aware(current_date, timezone.get_default_timezone())
-        data['avg_v'].append(Electricity.objects.get_avg_voltage(start_date, current_date))
-        data['avg_c'].append(Electricity.objects.get_avg_current(start_date, current_date))
-        data['avg_p'].append(Electricity.objects.get_avg_power(start_date, current_date))
-        data['cost'].append(Electricity.objects.get_cost(cost_kw_h, start_date, current_date))
+        avg_v = Electricity.objects.get_avg_voltage(start_date, current_date)
+        avg_c = Electricity.objects.get_avg_current(start_date, current_date)
+        avg_p = Electricity.objects.get_avg_power(start_date, current_date)
+        cost = Electricity.objects.get_cost(cost_kw_h, start_date, current_date)
+
+        if (avg_v is not None) and (avg_c is not None) and (avg_p is not None) and (cost is not None):
+            data['avg_v'].append(avg_v)
+            data['avg_c'].append(avg_c)
+            data['avg_p'].append(avg_p)
+            data['cost'].append(cost)
 
         return data
 
@@ -99,10 +105,16 @@ class ElectricityGraphData(object):
         start_date = current_date + thirty_days_ago
         start_date = timezone.make_aware(start_date, timezone.get_default_timezone())
         current_date = timezone.make_aware(current_date, timezone.get_default_timezone())
-        data['avg_v'].append(Electricity.objects.get_avg_voltage(start_date, current_date))
-        data['avg_c'].append(Electricity.objects.get_avg_current(start_date, current_date))
-        data['avg_p'].append(Electricity.objects.get_avg_power(start_date, current_date))
-        data['cost'].append(Electricity.objects.get_cost(cost_kw_h, start_date, current_date))
+        avg_v = Electricity.objects.get_avg_voltage(start_date, current_date)
+        avg_c = Electricity.objects.get_avg_current(start_date, current_date)
+        avg_p = Electricity.objects.get_avg_power(start_date, current_date)
+        cost = Electricity.objects.get_cost(cost_kw_h, start_date, current_date)
+
+        if (avg_v is not None) and (avg_c is not None) and (avg_p is not None) and (cost is not None):
+            data['avg_v'].append(avg_v)
+            data['avg_c'].append(avg_c)
+            data['avg_p'].append(avg_p)
+            data['cost'].append(cost)
 
         return data
 
@@ -143,10 +155,16 @@ class ElectricityGraphData(object):
         start_date = current_date - one_hour
         start_date = timezone.make_aware(start_date, timezone.get_default_timezone())
         current_date = timezone.make_aware(current_date, timezone.get_default_timezone())
-        data['avg_v'].append(Electricity.objects.get_avg_voltage(start_date, current_date))
-        data['avg_c'].append(Electricity.objects.get_avg_current(start_date, current_date))
-        data['avg_p'].append(Electricity.objects.get_avg_power(start_date, current_date))
-        data['cost'].append(Electricity.objects.get_cost(cost_kw_h, start_date, current_date))
+        avg_v = Electricity.objects.get_avg_voltage(start_date, current_date)
+        avg_c = Electricity.objects.get_avg_current(start_date, current_date)
+        avg_p = Electricity.objects.get_avg_power(start_date, current_date)
+        cost = Electricity.objects.get_cost(cost_kw_h, start_date, current_date)
+
+        if (avg_v is not None) and (avg_c is not None) and (avg_p is not None) and (cost is not None):
+            data['avg_v'].append(avg_v)
+            data['avg_c'].append(avg_c)
+            data['avg_p'].append(avg_p)
+            data['cost'].append(cost)
 
         return data
 
@@ -196,9 +214,14 @@ class WaterGraphData(object):
         start_date = timezone.datetime(current_date.year, 1, 1)
         start_date = timezone.make_aware(start_date, timezone.get_default_timezone())
         current_date = timezone.make_aware(current_date, timezone.get_default_timezone())
-        data['total_l'].append(Water.objects.get_total_liters(start_date, current_date))
-        data['total_m3'].append(Water.objects.get_total_m3(start_date, current_date))
-        data['cost'].append(Water.objects.get_cost(cost_m3, start_date, current_date))
+        total_l = Water.objects.get_total_liters(start_date, current_date)
+        total_m3 = Water.objects.get_total_m3(start_date, current_date)
+        cost = Water.objects.get_cost(cost_m3, start_date, current_date)
+
+        if (total_l is not None) and (total_m3 is not None) and (cost is not None):
+            data['total_l'].append(Water.objects.get_total_liters(start_date, current_date))
+            data['total_m3'].append(Water.objects.get_total_m3(start_date, current_date))
+            data['cost'].append(Water.objects.get_cost(cost_m3, start_date, current_date))
 
         return data
 
@@ -237,9 +260,14 @@ class WaterGraphData(object):
         start_date = current_date + thirty_days_ago
         start_date = timezone.make_aware(start_date, timezone.get_default_timezone())
         current_date = timezone.make_aware(current_date, timezone.get_default_timezone())
-        data['total_l'].append(Water.objects.get_total_liters(start_date, current_date))
-        data['total_m3'].append(Water.objects.get_total_m3(start_date, current_date))
-        data['cost'].append(Water.objects.get_cost(cost_m3, start_date, current_date))
+        total_l = Water.objects.get_total_liters(start_date, current_date)
+        total_m3 = Water.objects.get_total_m3(start_date, current_date)
+        cost = Water.objects.get_cost(cost_m3, start_date, current_date)
+
+        if (total_l is not None) and (total_m3 is not None) and (cost is not None):
+            data['total_l'].append(Water.objects.get_total_liters(start_date, current_date))
+            data['total_m3'].append(Water.objects.get_total_m3(start_date, current_date))
+            data['cost'].append(Water.objects.get_cost(cost_m3, start_date, current_date))
 
         return data
 
@@ -277,9 +305,14 @@ class WaterGraphData(object):
         start_date = current_date - one_hour
         start_date = timezone.make_aware(start_date, timezone.get_default_timezone())
         current_date = timezone.make_aware(current_date, timezone.get_default_timezone())
-        data['total_l'].append(Water.objects.get_total_liters(start_date, current_date))
-        data['total_m3'].append(Water.objects.get_total_m3(start_date, current_date))
-        data['cost'].append(Water.objects.get_cost(cost_m3, start_date, current_date))
+        total_l = Water.objects.get_total_liters(start_date, current_date)
+        total_m3 = Water.objects.get_total_m3(start_date, current_date)
+        cost = Water.objects.get_cost(cost_m3, start_date, current_date)
+
+        if (total_l is not None) and (total_m3 is not None) and (cost is not None):
+            data['total_l'].append(Water.objects.get_total_liters(start_date, current_date))
+            data['total_m3'].append(Water.objects.get_total_m3(start_date, current_date))
+            data['cost'].append(Water.objects.get_cost(cost_m3, start_date, current_date))
 
         return data
 

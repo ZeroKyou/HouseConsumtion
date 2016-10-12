@@ -11,13 +11,11 @@ class ElectricityManager(Manager):
     def get_avg_current(self, start_date, end_date):
         avg_current = self.filter(date__gte=start_date, date__lt=end_date).aggregate(Avg('current'))
         if avg_current['current__avg'] is None:
-            return 0
+            return None
         return round(avg_current['current__avg'], 2)
 
     def get_avg_voltage(self, start_date, end_date):
         avg_voltage = self.filter(date__gte=start_date, date__lt=end_date).aggregate(Avg('voltage'))
-        if avg_voltage['voltage__avg'] is None:
-            return 0
         return avg_voltage['voltage__avg']
 
     def get_avg_power(self, start_date, end_date):
@@ -25,7 +23,7 @@ class ElectricityManager(Manager):
         results = self.filter(date__gte=start_date, date__lt=end_date)
 
         if not results.exists():
-            return 0
+            return None
 
         for result in results:
             avg_power += result.power
@@ -35,6 +33,8 @@ class ElectricityManager(Manager):
     def get_cost(self, cost_kw_h, start_date, end_date):
         avg_power = self.get_avg_power(start_date, end_date)
         results = self.filter(date__gte=start_date, date__lt=end_date)
+        if not results.exists():
+            return None
         date_first_reading = results.first().date
         date_last_reading = results.last().date
         hours = date_last_reading - date_first_reading
@@ -52,8 +52,6 @@ class WaterManager(Manager):
 
     def get_total_liters(self, start_date, end_date):
         total_liters = self.filter(date__gte=start_date, date__lt=end_date).aggregate(Sum('liters'))
-        if total_liters['liters__sum'] is None:
-            return 0
         return total_liters['liters__sum']
 
     def get_total_m3(self, start_date, end_date):
@@ -61,7 +59,7 @@ class WaterManager(Manager):
         results = self.filter(date__gte=start_date, date__lt=end_date)
 
         if not results.exists():
-            return 0
+            return None
 
         for result in results:
             total_m3 += result.cubic_meters
@@ -70,6 +68,8 @@ class WaterManager(Manager):
 
     def get_cost(self, cost_m3, start_date, end_date):
         total_m3 = self.get_total_m3(start_date, end_date)
+        if total_m3 is None:
+            return None
         return total_m3 * cost_m3
 
 

@@ -43,6 +43,8 @@ def send_email(sender, created, instance, **kwargs):
             if len(values.to_send) == 0:
                 values.to_send[data_type[sender.__name__]] = instance.get_reading()
             else:
+                if data_type[sender.__name__] in values.to_send:
+                    return
                 values.to_send[data_type[sender.__name__]] = instance.get_reading()
                 emails = Settings.objects.send_email(values.to_send)
                 if len(emails) > 0:
