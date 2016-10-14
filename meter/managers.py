@@ -5,7 +5,7 @@ class ElectricityManager(Manager):
 
     def save_reading(self, irms):
         # Divide irms by 1000 or do right shift
-        irms = round(float(irms/1000), 2)
+        irms = round(float(irms/100), 2)
         self.create(current=irms)
 
     def get_avg_current(self, start_date, end_date):
