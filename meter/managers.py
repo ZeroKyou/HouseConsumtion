@@ -4,7 +4,6 @@ from django.db.models import Manager, Avg, Sum
 class ElectricityManager(Manager):
 
     def save_reading(self, irms):
-        # Divide irms by 1000 or do right shift
         irms = round(float(irms/100), 2)
         self.create(current=irms)
 
