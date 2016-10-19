@@ -4,7 +4,7 @@ from django.db.models import Manager, Avg, Sum
 class ElectricityManager(Manager):
 
     def save_reading(self, irms):
-        irms = round(float(irms/100), 2)
+        irms = round(float(irms/100), 3)
         self.create(current=irms)
 
     def get_avg_current(self, start_date, end_date):
