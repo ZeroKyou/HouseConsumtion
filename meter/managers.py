@@ -4,7 +4,6 @@ from django.db.models import Manager, Avg, Sum
 class ElectricityManager(Manager):
 
     def save_reading(self, irms):
-        irms = float(irms)
         irms = round(irms/100.0, 2)
         self.create(current=irms)
 
