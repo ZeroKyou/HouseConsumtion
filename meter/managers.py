@@ -4,7 +4,8 @@ from django.db.models import Manager, Avg, Sum
 class ElectricityManager(Manager):
 
     def save_reading(self, irms):
-        irms = round(float(irms/100), 3)
+        irms = float(irms)
+        irms = round(irms/100.0, 2)
         self.create(current=irms)
 
     def get_avg_current(self, start_date, end_date):
@@ -69,7 +70,7 @@ class WaterManager(Manager):
         total_m3 = self.get_total_m3(start_date, end_date)
         if total_m3 is None:
             return None
-        return total_m3 * cost_m3
+        return round(total_m3 * cost_m3, 2)
 
 
 class SettingsManager(Manager):
