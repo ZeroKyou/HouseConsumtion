@@ -56,7 +56,7 @@ class SettingsForm(forms.ModelForm):
         fields = ('cost_kw_per_hour', 'cost_m3', 'send_email', 'power_warning', 'liters_warning')
         widgets = {
             'cost_kw_per_hour': forms.NumberInput(attrs={'class': 'form-control',
-                                                         'placeholder': 'Custo kW/h em euros'}),
+                                                         'placeholder': 'Custo kWh em euros'}),
             'cost_m3': forms.NumberInput(attrs={'class': 'form-control',
                                                 'placeholder': 'Custo por metro cúbico em euros'}),
             'send_email': forms.CheckboxInput(),
@@ -66,7 +66,7 @@ class SettingsForm(forms.ModelForm):
                                                        'placeholder': 'Litros de água'}),
         }
         labels = {
-            'cost_kw_per_hour': "Custo(€) por kW/h:",
+            'cost_kw_per_hour': "Custo(€) por kWh:",
             'cost_m3': "Custo(€) por m³:",
             'send_email': "Enviar alerta por email:",
             'power_warning': "Limite de potência (W):",
