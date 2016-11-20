@@ -213,6 +213,9 @@ $(document).ready(function() {
 
         case 'recent':
             Highcharts.setOptions({
+                chart: {
+                    type: 'line',
+                },
                 xAxis: {
                     type: 'datetime',
                     labels: {
