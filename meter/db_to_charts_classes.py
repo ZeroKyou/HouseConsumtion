@@ -88,7 +88,7 @@ class ElectricityGraphData(object):
         start_date = timezone.make_aware(start_date, timezone.get_default_timezone())
         end_date = start_date
 
-        for day in range(1, 31):
+        for day in range(1, 32):
             start_date_js = int(time.mktime(start_date.timetuple())) * 1000
             end_date = end_date + one_day
             current = Electricity.objects.get_avg_current(start_date, end_date)
@@ -246,7 +246,7 @@ class WaterGraphData(object):
         start_date = timezone.make_aware(start_date, timezone.get_default_timezone())
         end_date = start_date
 
-        for day in range(1, 31):
+        for day in range(1, 32):
             start_date_js = int(time.mktime(start_date.timetuple())) * 1000
             end_date = end_date + one_day
             liters = Water.objects.get_total_liters(start_date, end_date)
